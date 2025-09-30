@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import bcrypt from 'bcrypt';
 
 const userSchema=new mongoose.Schema({
 userName:{
@@ -47,11 +48,13 @@ password:{
 }
 
 },{timestamps:true});
-userSchema.plugin(function (fn, op) {
-    console.log("this",fn);
-    console.log("Options passed:", op);
-}, { message: 'hello' });
-console.log("userSchema",userSchema);
+userSchema.pre('save',function(){
+    if(!this.isPasswordVerify('password')){return }
+    return this.password=bcrypt.hash(this.password);
+})
+userSchema.methods.isPasswordVerify=(password)=>{
+    return bcrypt.compare(password,this.password);
+}
 
 const userModel=mongoose.model("user",userSchema);
 
