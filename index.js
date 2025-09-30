@@ -4,6 +4,7 @@ import express from 'express';
 import mongodbConnection from './db/index.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { userModel } from './models/user.model.js';
 const app=express();
 
 //middleware
@@ -12,7 +13,8 @@ app.use(express.urlencoded({extended:true , limit:"2MB"}));
 app.use(express.static('public'));
 app.use(cors());
 app.use(cookieParser());
-
+userModel
+// console.log("userModel",);
 
 mongodbConnection().then(()=>{
   app.listen((process.env.PORT || 3000),()=>{

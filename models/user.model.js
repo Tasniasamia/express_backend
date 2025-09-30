@@ -47,5 +47,12 @@ password:{
 }
 
 },{timestamps:true});
+userSchema.plugin(function (fn, op) {
+    console.log("this",fn);
+    console.log("Options passed:", op);
+}, { message: 'hello' });
+console.log("userSchema",userSchema);
+
 const userModel=mongoose.model("user",userSchema);
+
 export {userModel};
