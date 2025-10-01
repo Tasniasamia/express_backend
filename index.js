@@ -13,8 +13,7 @@ app.use(express.urlencoded({extended:true , limit:"2MB"}));
 app.use(express.static('public'));
 app.use(cors());
 app.use(cookieParser());
-userModel
-// console.log("userModel",);
+console.log("userModel",userModel);
 
 mongodbConnection().then(()=>{
   app.listen((process.env.PORT || 3000),()=>{
