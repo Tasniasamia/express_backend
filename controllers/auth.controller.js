@@ -17,21 +17,15 @@ const registerController = asyncHandler(async (req, res) => {
     } = req.body;
 
     if (
-        [
-            userName,
-            email,
-            password,
-            fullName,
-            avatar,
-            coverImage,
-            watchHistory,
-            refreshToken,
-        ].some((field) => field.trim() === '')
+        [userName, email, password, fullName].some(
+            (field) => !field || field.trim() === ''
+        )
     ) {
         throw new Apierror(400, 'All fields are required');
     }
+    
 
-    const existUser=userModel.findOne({
+    const existUser=await userModel.findOne({
         $or:[{userName},{email}]
     })
     if(existUser){
@@ -46,9 +40,10 @@ throw new Apierror(400,'Avatar file is required');
 }
 
 const avatarURL=await uploadCloudinary(avatarPath);
+console.log("avatarURL",avatarURL)
 const coverImageURL=await uploadCloudinary(coverImagePath);
 
-const user=userModel.create({
+const user=await userModel.create({
     userName,
     email,
     password,
@@ -56,9 +51,9 @@ const user=userModel.create({
     coverImage:coverImageURL?.url,
     fullName,
     watchHistory,
-    refreshToken
+    refreshToken:''
 });
-const createdUser=userModel.findById(user?._id).select('-password -refreshToken');
+const createdUser=await userModel.findById(user?._id).select('-password -refreshToken');
 if(!createdUser){
     throw new Apierror(500,'Something went wrong');
 

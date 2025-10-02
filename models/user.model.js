@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema(
         fullName: {
             type: String,
             required: true,
-            trim: true,
             index: true,
         },
         avatar: {
@@ -40,7 +39,6 @@ const userSchema = new mongoose.Schema(
         ],
         refreshToken: {
             type: String,
-            required: true,
         },
         password: {
             type: String,
