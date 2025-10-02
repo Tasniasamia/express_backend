@@ -5,6 +5,7 @@ import mongodbConnection from './db/index.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { userModel } from './models/user.model.js';
+import router from './routes/root.router.js';
 const app=express();
 
 //middleware
@@ -13,7 +14,9 @@ app.use(express.urlencoded({extended:true , limit:"2MB"}));
 app.use(express.static('public'));
 app.use(cors());
 app.use(cookieParser());
-console.log("userModel",userModel);
+
+app.use('/api/v1',router);
+
 
 mongodbConnection().then(()=>{
   app.listen((process.env.PORT || 3000),()=>{
@@ -23,6 +26,4 @@ mongodbConnection().then(()=>{
 throw new err;
 })
 
-app.get('/',(req,res)=>{
-  res.send("Server is running");
-})
+
