@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { upload } from '../middleware/multer.middleware.js';
-import { registerController } from '../controllers/auth.controller.js';
+import { registerController,loginController,loggedOutController } from '../controllers/auth.controller.js';
+import { verifyToken } from '../middleware/auth.middleware.js';
 const authRoute = Router();
 authRoute.post('/resister',
     upload.fields([
@@ -9,4 +10,9 @@ authRoute.post('/resister',
     ]),
     registerController,
 );
+authRoute.post('/login',
+loginController,
+);
+authRoute.post('/logout',verifyToken,loggedOutController);
+
 export default authRoute;

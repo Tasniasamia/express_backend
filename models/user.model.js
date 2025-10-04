@@ -56,22 +56,23 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.isPasswordVerify = async function (password) {
+    console.log("this.password",this.password)
     return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.accessToken = function (payload) {
+userSchema.methods.generateAccessToken = function (payload) {
     return jwt.sign(
         { userName: this.userName, email: this.email, password: this.userName },
         process.env.ACCESS_TOKEN_SECRET,
-        { expireIn: process.env.EXPIREIN },
+        { expiresIn: process.env.EXPIREIN },
     );
 };
 
-userSchema.methods.RefreshToken = function (payload) {
+userSchema.methods.generateRefreshToken = function (payload) {
     return jwt.sign(
-        { userName: this.userName, email: this.email, password: this.userName },
+        { _id: this._id },
         process.env.REFRESH_TOKEN_SECRET,
-        { expireIn: process.env.REFRESH_EXPIRY },
+        { expiresIn: process.env.REFRESH_EXPIRY },
     );
 };
 
